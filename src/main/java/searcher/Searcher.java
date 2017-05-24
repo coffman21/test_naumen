@@ -1,6 +1,7 @@
 package searcher;
 
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class Searcher implements ISearcher {
     private Node root;
@@ -12,19 +13,19 @@ public class Searcher implements ISearcher {
 
     @Override
     public void refresh(String[] classNames, long[] modificationDates) {
-
         for (int i = 0; i < classNames.length; i++) {
             Node currNode = this.root;
             HashMap<Character, Node> children = currNode.children;
             for (int j = 0; j < classNames[i].length(); j++) {
                 Character currChar = classNames[i].charAt(j);
-                if (children.containsKey(currChar)) {
-
-                } else {
+                if (!children.containsKey(currChar)) {
                     children.put(currChar, new Node(currChar));
                 }
                 currNode = children.get(currChar);
                 children = currNode.children;
+                if (currNode.maxModDate < modificationDates[i]) {
+                    currNode.maxModDate = modificationDates[i];
+                }
             }
             currNode.setNameDate(classNames[i], modificationDates[i]);
             if (i % 10000 == 0) {
@@ -37,6 +38,12 @@ public class Searcher implements ISearcher {
 
     @Override
     public String[] guess(String start) {
+        Node currNode = this.root;
+        for (int i = 0; i < start.length(); i++) {
+            char currChar = start.charAt(i);
+            currNode = currNode.children.get(currChar);
+        }
+
         return new String[0];
     }
 }

@@ -15,7 +15,6 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         ArrayList<String> dict = new ArrayList<>();
-        Collections.shuffle(dict, new Random(42));
         ArrayList<Long> stamps = new ArrayList<>();
         File f = new File("./src/main/test/resources/dict");
         try {
@@ -44,15 +43,19 @@ public class Main {
         System.out.println("time to refresh(): " + (new Date().getTime() - now) + " ms");
 
         ArrayList<Integer> execTimes = new ArrayList<>();
-        for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 100000); i++) {
-            String start = classNames[ThreadLocalRandom.current().nextInt(100000)];
-            start = start.substring(0, start.length()/2);
+        //for (int i = 0; i < ThreadLocalRandom.current().nextInt(1, 100000); i++) {
+        for (int i = 0; i < 15; i++) {
+            String start = dict.get(ThreadLocalRandom.current().nextInt(100000));
+            start = start.substring(0, ThreadLocalRandom.current().nextInt(1, start.length()-1));
 
             now = new Date().getTime();
             s.guess(start);
-            execTimes.add((int) (now - new Date().getTime()));
+            execTimes.add((int) (new Date().getTime() - now));
+            System.out.println("string: " + start);
+            System.out.println("time to guess(): " + (new Date().getTime() - now));
+
         }
-        System.out.println("average time to guess(): " + execTimes.stream().reduce(0, Integer::sum) + " ms");
+        System.out.println("average time to guess(): " + execTimes.stream().reduce(0, Integer::sum)/execTimes.size() + " ms");
 
     }
 }
