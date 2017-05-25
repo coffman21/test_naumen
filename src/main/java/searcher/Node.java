@@ -8,13 +8,19 @@ public class Node implements Comparator<Node> {
     private Long modificationDate;
 
     public long maxModDate;
+    public long currModDate;
+
     public Character character;
     public HashMap<Character, Node> children;
 
-    Node(Character c) {
+    public Node parent;
+
+    Node(Character c, Node p) {
         character = c;
         children = new HashMap<>();
         maxModDate = 0L;
+        currModDate = 0L;
+        parent = p;
     }
     public void setNameDate(String name, Long date) {
         className = name;
@@ -26,5 +32,21 @@ public class Node implements Comparator<Node> {
         int foo = o1.modificationDate.compareTo(o2.modificationDate);
         if (foo == 0) foo = o1.className.compareTo(o2.className);
         return foo;
+    }
+
+    public void setModificaionDate(Long modificaionDate) {
+        this.modificationDate = modificaionDate;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public Long getModificationDate() {
+        return modificationDate;
+    }
+
+    public String getClassName() {
+        return className;
     }
 }
