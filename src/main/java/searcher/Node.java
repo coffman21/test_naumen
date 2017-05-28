@@ -7,26 +7,30 @@ public class Node implements Comparator<Node> {
     private String className;
     private Long modificationDate;
 
+    //public boolean isLeaf = false;
     public long maxModDate;
     public long currModDate;
 
     public Character character;
     public HashMap<Character, Node> children;
 
-    public Node parent;
+    //public Node parent;
 
     Node(Character c, Node p) {
         character = c;
         children = new HashMap<>();
         maxModDate = 0L;
         currModDate = 0L;
-        parent = p;
+      //  parent = p;
     }
     public void setNameDate(String name, Long date) {
         className = name;
         modificationDate = date;
+        //isLeaf = true;
     }
 
+
+    // TODO: probably won't needed
     @Override
     public int compare(Node o1, Node o2) {
         int foo = o1.modificationDate.compareTo(o2.modificationDate);

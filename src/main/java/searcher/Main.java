@@ -45,10 +45,10 @@ public class Main {
 
 
     public static void main(String[] args) {
-        //String[] classNames = dictionary();
-        //long[] modificationDates = stamps();
+//        String[] classNames = dictionary();
+//        long[] modificationDates = stamps();
         String[] classNames = {"arthur", "clime", "aband", "array", "arth", "bike", "colata"};
-        long[] modificationDates = {140, 137, 127, 120, 120, 120, 115};
+        long[] modificationDates = {140, 137, 127, 130, 120, 120, 115};
 
         Searcher s = new Searcher();
         long now = new Date().getTime();
@@ -63,6 +63,7 @@ public class Main {
 
             now = new Date().getTime();
             s.guess("a");
+            System.out.println(Arrays.toString(s.guess(start)));
             execTimes.add((int) (new Date().getTime() - now));
             System.out.println("string: " + start);
             System.out.println("time to guess(): " + (new Date().getTime() - now));

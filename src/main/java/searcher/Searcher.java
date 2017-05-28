@@ -1,5 +1,7 @@
 package searcher;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Searcher implements ISearcher {
@@ -20,15 +22,17 @@ public class Searcher implements ISearcher {
                 if (!children.containsKey(currChar)) {
                     children.put(currChar, new Node(currChar, currNode));
                 }
-                if (currNode.maxModDate < modificationDates[i]) {
-                    currNode.maxModDate = modificationDates[i];
-                }
                 currNode = children.get(currChar);
                 children = currNode.children;
 
+                if (currNode.maxModDate < modificationDates[i]) {
+                    currNode.maxModDate = modificationDates[i];
+                }
+
             }
-            currNode.setClassName(classNames[i]);
-            currNode.setModificaionDate(modificationDates[i]);
+            currNode.setNameDate(classNames[i], modificationDates[i]);
+            //currNode.setClassName(classNames[i]);
+            //currNode.setModificaionDate(modificationDates[i]);
             if (i % 10000 == 0) {
                 System.out.println("iteration: " + i);
                 System.out.println("total memory: " + Runtime.getRuntime().maxMemory());
@@ -55,17 +59,23 @@ public class Searcher implements ISearcher {
         }
         Node root = currNode;
         fillCurrModDate(root); // ?
+        ArrayList<String> guess = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            String s = getLatestName(root);
-        }
-        fillCurrModDate(root);
+            String name = getLatestName(root);
+            if (name == null) {
+                break;
+            }
+            guess.add(name);
 
-        return new String[0];
+        }
+
+        return guess.stream().toArray(String[]::new);
     }
 
     private String getLatestName(Node node) {
         String name = null;
-        if (node.children == null) {
+        // if getModificationDate exists, so the node is a leaf and contains a word
+        if (node.getModificationDate() != null && node.getModificationDate() == node.currModDate) {
             name = node.getClassName();
             node.currModDate = 0;
             return name;
@@ -82,9 +92,11 @@ public class Searcher implements ISearcher {
 
         if (nextNode != null) {
             name = getLatestName(nextNode);
+            nextNode.currModDate = 0;
             latestDate = 0;
             for (Node child : nextNode.children.values()) {
                 if (child.currModDate > latestDate) {
+                    latestDate = child.currModDate;
                     nextNode.currModDate = latestDate;
                 }
             }
